@@ -1,31 +1,184 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>FUNKY INTERNET RADIO!</title>
+    <title>FUNKPLAY!</title>
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <style>
       .spacetop {
         margin-top: 150px;
       }
+
+      .dropzone {
+        height: 300px;
+        background-color: #EFEFEF;
+        border: solid 1px #333;
+        border-radius: 10px;
+        width: 100%;
+      }
+
+      .dropcontainer {
+        position: relative;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      .droptext {
+        position: relative;
+        top: -190px;
+        left: 20px;
+        font-size: 27px;
+        color: #888;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      .player {
+        padding: 20px;
+        display: inline-block;
+      }
+
+      .player a {
+        margin: 0 10px;
+      }
+
+      .shuffling {
+        color: #BADA55 !important;
+      }
+
+      .localsearch {
+        margin-bottom: 10px;
+      }
     </style>
   </head>
   <body>
     <div class="container spacetop">
-      <nav class="navbar navbar-default">
-        <span class="navbar-brand">FunkyTown Music Player</span>
-        <div class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li>
-              <span class="glyphicon glyphicon-play">Play</span>
-            </li>
-          </ul>
-        </div>
-
-      </nav>
+      <h3>Funky Music Player</h3>
+      <div class="panel panel-default player">
+        <a href="#" id="player-back"><span class="glyphicon glyphicon-step-backward"></span></a>
+        <a href="#" id="player-play"><span class="glyphicon glyphicon-play"></span></a>
+        <a href="#" id="player-pause" class="hidden"><span class="glyphicon glyphicon-pause"></span></a>
+        <a href="#" id="player-next"><span class="glyphicon glyphicon-step-forward"></span></a>
+        <a href="#" id="player-shuffle"><span class="glyphicon glyphicon-random"></span></a>
+        <span style="margin-left: 20px; font-weight: bold; color: #999;">Song Name - Album - Artist</span>
+      </div>
     </div>
 
+    <div class="container spacemid">
+      <div class="col-md-4">
+        <h3>Now Playing: <span class="badge">7</span></h3>
+        <table class="table" id="player-playlist">
+          <th>#</th>
+          <th>Song name<th>
+          <tr><td>1</td><td>Song</td></tr>
+          <tr class="active"><td>2</td><td>Song</td></tr>
+          <tr><td>3</td><td>Song</td></tr>
+          <tr><td>4</td><td>Song</td></tr>
+          <tr><td>5</td><td>Song</td></tr>
+          <tr><td>6</td><td>Song</td></tr>
+          <tr class=""><td>7</td><td>Song</td></tr>
+        </table>
+      </div>
+      <div class="col-md-4">
+        <h3>Local Media:</h3>
+        <div class="localcontent">
+          <div class="input-group localsearch">
+            <input type="search" class="form-control" placeholder="Search Music" id="content-search" />
+            <a href="#" class="input-group-addon" id="content-search-btn"><span class="glyphicon glyphicon-search"></span></a>
+          </div>
+          <ul class="nav nav-pills nav-stacked" id="content-local-artists">
+            <li><a href="#">Artist 1</a></li>
+            <li><a href="#">Artist 2</a></li>
+            <li><a href="#">Artist 3</a></li>
+            <li><a href="#">Artist 4</a></li>
+            <li><a href="#">Artist 5</a></li>
+            <li><a href="#">Artist 6</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <h3>Remote Media:</h3>
+        <div class="dropcontainer">
+          <input type="text" class="dropzone" id="content-remote" />
+          <span class="droptext">DROP SPOTIFY SONGS HERE</span>
+        </div>
+      </div>
+    </div>
 
     <script src="js/jq.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/jqd.js"></script>
+    <script>
+
+    $(function() {
+
+      var isplaying = false;
+      var isshuffling = false;
+
+      var play = function() {
+        if(isplaying) return;
+        $("#player-play").addClass("hidden");
+        $("#player-pause").removeClass("hidden");
+        console.log("PLAY!");
+        isplaying = true;
+      };
+
+      var pause = function() {
+        if(!isplaying) return;
+        $("#player-pause").addClass("hidden");
+        $("#player-play").removeClass("hidden");
+        console.log("PAUSE!");
+        isplaying = false;
+      };
+
+      var shuffle = function() {
+        isshuffling = !isshuffling;
+        if(isshuffling) {
+          $("#player-shuffle").addClass("shuffling");
+        } else {
+          $("#player-shuffle").removeClass("shuffling");
+        }
+      };
+
+      $("#player-play").click(function() {
+        play();
+      });
+
+      $("#player-pause").click(function() {
+        pause();
+      });
+
+      $("#player-next").click(function() {
+        console.log("NEXT!");
+        play();
+      });
+
+      $("#player-back").click(function() {
+        console.log("BACK!");
+        play();
+      });
+
+      $("#player-shuffle").click(function() {
+        console.log("SHUFFLE ME BABY!");
+        shuffle();
+      });
+
+      $("#content-search").keyup($.debounce(function() {
+        var term = $("#content-search").val();
+        if(term != "")
+          console.log("search for: " + term);
+      },1000))
+
+    });
+
+
+    </script>
   </body>
 </html>
