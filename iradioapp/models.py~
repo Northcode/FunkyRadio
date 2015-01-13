@@ -1,0 +1,14 @@
+from django.db import models
+
+# Create your models here.
+class Song (models.Model):
+    name = models.CharField(max_length=100)
+    uri = models.URLField()
+    group = models.ForeignKey('Group')
+
+class Group (models.Model):
+    name = models.CharField(max_length=100)
+    users = models.ManyToManyField("Users")
+    
+class User (models.Model):
+    name = models.CharField(max_length=100)
