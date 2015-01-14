@@ -25,3 +25,7 @@ def init():
 			print("Failed to authenticate connection to mpc server at %s:%s with password" % (HOST, PORT))
 			return
 
+def isPlaying():
+	global client
+	return client.status()["state"] == "play"
+
