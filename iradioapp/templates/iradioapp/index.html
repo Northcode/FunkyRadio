@@ -1,90 +1,98 @@
 {% load staticfiles %}
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>FUNKPLAY!</title>
-	<link href="{% static 'iradioapp/css/bootstrap.min.css' %}" rel="stylesheet" />
-    <style>
-      .spacetop {
-        margin-top: 150px;
-      }
+<head>
+  <meta charset="utf-8" />
+  <title>FUNKPLAY!</title>
+  <link href="{% static 'iradioapp/css/bootstrap.min.css' %}" rel="stylesheet" />
+  <style>
+  .spacetop {
+    margin-top: 150px;
+  }
 
-      .dropzone {
-        height: 300px;
-        background-color: #EFEFEF;
-        border: solid 1px #333;
-        border-radius: 10px;
-        width: 100%;
-      }
+  .dropzone {
+    height: 150px;
+    background-color: #EFEFEF;
+    border: solid 1px #333;
+    border-radius: 10px;
+    width: 100%;
+    font-size: 20px;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
 
-      .dropcontainer {
-        position: relative;
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
+  .dropcontainer {
+    position: relative;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
 
-      .droptext {
-        position: relative;
-        top: -190px;
-        left: 20px;
-        font-size: 27px;
-        color: #888;
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
+  .droptext {
+    position: relative;
+    top: -110px;
+    left: 20px;
+    font-size: 27px;
+    color: #888;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
 
-      .player {
-        padding: 20px;
-        display: inline-block;
-      }
+  .player {
+    padding: 20px;
+    display: inline-block;
+  }
 
-      .player a {
-        margin: 0 10px;
-      }
+  .player a {
+    margin: 0 10px;
+  }
 
-      .shuffling {
-        color: #BADA55 !important;
-      }
+  .shuffling {
+    color: #BADA55 !important;
+  }
 
-      .localsearch {
-        margin-bottom: 10px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container spacetop">
-      <h3>Funky Music Player</h3>
-      <div class="panel panel-default player">
-        <a href="#" id="player-back"><span class="glyphicon glyphicon-step-backward"></span></a>
-        <a href="#" id="player-play"><span class="glyphicon glyphicon-play"></span></a>
-        <a href="#" id="player-pause" class="hidden"><span class="glyphicon glyphicon-pause"></span></a>
-        <a href="#" id="player-next"><span class="glyphicon glyphicon-step-forward"></span></a>
-        <a href="#" id="player-shuffle"><span class="glyphicon glyphicon-random"></span></a>
-        <span id="songinfo" style="margin-left: 20px; font-weight: bold; color: #999;">Song Name - Album - Artist</span>
-      </div>
+  .localsearch {
+    margin-bottom: 10px;
+  }
+
+  .player-playlist {
+    height: 400px;
+    overflow: scroll;
+  }
+
+  #content-local-albums {
+    display: none;
+  }
+
+  #content-local-songs {
+    display: none;
+  }
+  </style>
+</head>
+<body>
+  <div class="container spacetop">
+    <h3>Funky Music Player</h3>
+    <div class="panel panel-default player">
+      <a href="#" id="player-back"><span class="glyphicon glyphicon-step-backward"></span></a>
+      <a href="#" id="player-play"><span class="glyphicon glyphicon-play"></span></a>
+      <a href="#" id="player-pause" class="hidden"><span class="glyphicon glyphicon-pause"></span></a>
+      <a href="#" id="player-next"><span class="glyphicon glyphicon-step-forward"></span></a>
+      <a href="#" id="player-shuffle"><span class="glyphicon glyphicon-random"></span></a>
+      <span id="songinfo" style="margin-left: 20px; font-weight: bold; color: #999;">Song Name - Album - Artist</span>
     </div>
+  </div>
 
-    <div class="container spacemid">
-      <div class="col-md-4">
-        <h3>Now Playing: <span class="badge">7</span></h3>
-        <table class="table" id="player-playlist">
-          <th>#</th>
-          <th>Song name<th>
-          <tr><td>1</td><td>Song</td></tr>
-          <tr class="active"><td>2</td><td>Song</td></tr>
-          <tr><td>3</td><td>Song</td></tr>
-          <tr><td>4</td><td>Song</td></tr>
-          <tr><td>5</td><td>Song</td></tr>
-          <tr><td>6</td><td>Song</td></tr>
-          <tr class=""><td>7</td><td>Song</td></tr>
+  <div class="container spacemid">
+    <div class="col-md-4">
+      <h3>Now Playing: <span class="badge">7</span></h3>
+      <table class="table" id="player-playlist">
+        <th>#</th><th>Song name<th>
         </table>
       </div>
       <div class="col-md-4">
@@ -102,89 +110,114 @@
             <li><a href="#">Artist 5</a></li>
             <li><a href="#">Artist 6</a></li>
           </ul>
+          <ul class="nav nav-pills nav-stacked" id="content-local-albums">
+            <li><a href="#">Album 1</a></li>
+            <li><a href="#">Album 2</a></li>
+            <li><a href="#">Album 3</a></li>
+            <li><a href="#">Album 4</a></li>
+            <li><a href="#">Album 5</a></li>
+            <li><a href="#">Album 6</a></li>
+          </ul>
+          <ul class="nav nav-pills nav-stacked" id="content-local-songs">
+            <li><a href="#">Song 1</a></li>
+            <li><a href="#">Song 2</a></li>
+            <li><a href="#">Song 3</a></li>
+            <li><a href="#">Song 4</a></li>
+            <li><a href="#">Song 5</a></li>
+            <li><a href="#">Song 6</a></li>
+          </ul>
         </div>
       </div>
       <div class="col-md-4">
         <h3>Remote Media:</h3>
         <div class="dropcontainer">
-          <input type="text" class="dropzone" id="content-remote" />
-          <span class="droptext">DROP SPOTIFY SONGS HERE</span>
+          <input type="text" class="dropzone" id="content-remote" placeholder="DRAG SONGS HERE" />
         </div>
       </div>
     </div>
 
-	<script src="{% static 'iradioapp/js/jq.js' %}"></script>
-	<script src="{% static 'iradioapp/js/bootstrap.min.js' %}"></script>
-	<script src="{% static 'iradioapp/js/jqd.js' %}"></script>
+    <script src="{% static 'iradioapp/js/jq.js' %}"></script>
+    <script src="{% static 'iradioapp/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'iradioapp/js/jqd.js' %}"></script>
     <script>
-	function getCookie(name) {
-		var cookieValue = null;
-		if (document.cookie && document.cookie != '') {
-			var cookies = document.cookie.split(';');
-			for (var i = 0; i < cookies.length; i++) {
-				var cookie = jQuery.trim(cookies[i]);
-				// Does this cookie string begin with the name we want?
-				if (cookie.substring(0, name.length + 1) == (name + '=')) {
-					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-					break;
-				}
-			}
-		}
-		return cookieValue;
-	}
-	function csrfSafeMethod(method) {
-		// these HTTP methods do not require CSRF protection
-		return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-	}
-	function sameOrigin(url) {
-		// test that a given url is a same-origin URL
-		// url could be relative or scheme relative or absolute
-		var host = document.location.host; // host + port
-		var protocol = document.location.protocol;
-		var sr_origin = '//' + host;
-		var origin = protocol + sr_origin;
-		// Allow absolute or scheme relative URLs to same origin
-		return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
-			(url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
-			// or any other URL that isn't scheme relative or absolute i.e relative.
-			!(/^(\/\/|http:|https:).*/.test(url));
-	}
-	$.ajaxSetup({
-		beforeSend: function(xhr, settings) {
-			if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
-				// Send the token to same-origin, relative URLs only.
-				// Send the token only if the method warrants CSRF protection
-				// Using the CSRFToken value acquired earlier
-				xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-			}
-		}
-	});
+    function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+          var cookie = jQuery.trim(cookies[i]);
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) == (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+    function csrfSafeMethod(method) {
+      // these HTTP methods do not require CSRF protection
+      return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    function sameOrigin(url) {
+      // test that a given url is a same-origin URL
+      // url could be relative or scheme relative or absolute
+      var host = document.location.host; // host + port
+      var protocol = document.location.protocol;
+      var sr_origin = '//' + host;
+      var origin = protocol + sr_origin;
+      // Allow absolute or scheme relative URLs to same origin
+      return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+      (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+      // or any other URL that isn't scheme relative or absolute i.e relative.
+      !(/^(\/\/|http:|https:).*/.test(url));
+    }
+    $.ajaxSetup({
+      beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+          // Send the token to same-origin, relative URLs only.
+          // Send the token only if the method warrants CSRF protection
+          // Using the CSRFToken value acquired earlier
+          xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+      }
+    });
 
-	function sendCommand(cmd, args={}, callback=null) {
-		args['command'] = cmd;
-		$.ajax('{% url "iradioapp:command" %}',{
-			method: "POST",
-			data: args,
-			success: callback
-		});
-	}
+    function sendCommand(cmd, args={}, callback=null) {
+      args['command'] = cmd;
+      $.ajax('{% url "iradioapp:command" %}',{
+        method: "POST",
+        data: args,
+        success: callback
+      });
+    }
 
-	var updateSongInfo = function() {
-		sendCommand("getCurrent", {}, function(data) {
-			$("#songinfo").text(data.title + " - " + data.album + " - " + data.artist);
-			console.log(data);
-		});
-	};
+    var updateSongInfo = function() {
+      sendCommand("getCurrent", {}, function(data) {
+        $("#songinfo").text(data.title + " - " + data.album + " - " + data.artist);
+        $("#player-playlist").children().children().each(function(i,d) {
+          var songname = $($(d).children()[1]).html();
+          if(songname == data.title) {
+            $(d).addClass("active");
+          } else {
+            $(d).removeClass("active");
+          }
+        });
+        //console.log(data);
+      });
+    };
 
-	var updatePlaylist = function() {
-		sendCommand("getPlaylist", {}, function(data) {
-			console.log(data);
-		});
-	};
+    var updatePlaylist = function() {
+      sendCommand("getPlaylist", {}, function(data) {
+        $("#player-playlist").html("<tbody><th>#</th><th>Song name<th>");
+        $(data["playlist"]).each(function (i,e) {
+          console.log(i,e);
+          $("#player-playlist").append("<tr><td>"+i+"</td><td>" + e.title + "</td></tr>")
+        });
+      });
+    };
 
     $(function() {
-
-
 
       var isplaying = false;
       var isshuffling = false;
@@ -217,7 +250,7 @@
 
       var shuffle = function() {
         isshuffling = !isshuffling;
-		sendCommand("shuffle", { "status": isshuffling });
+        sendCommand("shuffle", { "status": isshuffling });
         if(isshuffling) {
           $("#player-shuffle").addClass("shuffling");
         } else {
@@ -235,14 +268,16 @@
 
       $("#player-next").click(function() {
         console.log("NEXT!");
-		sendCommand("next");
-		play();
+        sendCommand("next");
+        play();
+        updateSongInfo();
       });
 
       $("#player-back").click(function() {
         console.log("BACK!");
-		sendCommand("previous");
+        sendCommand("previous");
         play();
+        updateSongInfo();
       });
 
       $("#player-shuffle").click(function() {
@@ -254,22 +289,40 @@
         var term = $("#content-search").val();
         if(term != "")
           console.log("search for: " + term);
-      },1000))
+        },1000));
 
-      //startup script
-      sendCommand("getPlaying",{},function(data) {
-        isplaying = data["playing"];
-        updateplaybtn();
+      $("#content-remote").on('drop',function(e) {
+        //does not set value instantly for some reason, wait 200 ms for the thing to change... :| this might break on slow devices....
+        setTimeout(function() {
+          var url = $("#content-remote").val();
+          console.log(url);
+          $("#content-remote").val('');
+          sendCommand('addSong',{url: url});
+          updatePlaylist();
+          updateSongInfo();
+        },200);
+
       });
-	updateSongInfo();
-	updatePlaylist();
 
-      //end startup
+      $("#content-local-artists>li").click(function() {
+        $("#content-local-artists").slideUp();
+        $("#content-local-albums").slideDown();
+      });
 
+      $("#content-local-albums>li").click(function() {
+        $("#content-local-albums").slideUp();
+        $("#content-local-songs").slideDown();
+      });
 
-    });
-
-
+        //startup script
+        sendCommand("getPlaying",{},function(data) {
+          isplaying = data["playing"];
+          updateplaybtn();
+        });
+        updatePlaylist();
+        updateSongInfo();
+        //end startup
+      });
     </script>
   </body>
 </html>
