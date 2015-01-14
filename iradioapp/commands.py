@@ -1,6 +1,10 @@
 from iradioapp import models
 from iradioapp import mpcclient
+import urllip.request
+import json
 import re
+
+CLIENT_ID = "3ace999b30d1885aba027ba93de287ff"
 
 def playpause(request):
 	mpcclient.playPause()
@@ -18,9 +22,16 @@ def setVolume(request):
 def setSong(request):
 	pass
 
+def parseSoundcloudUrl(url):
+	rurl = "http://api.soundcloud.com/resolve.json?client_id=%s&url=%s" % (CLIENT_ID, url)
+	resp = urllib.request.urlopen(rurl)
+	data = json.load(resp.read())
+	return "soundcloud:song/%s" % (data.id)
+
 song_regex = {
-	r'http:\/\/open.spotify.com\/track\/(?P<sid>\S+)': (lambda sid: ("spotify:track:%s" % (sid))),
+	r'https?:\/\/open.spotify.com\/track\/(?P<sid>\S+)': (lambda sid: ("spotify:track:%s" % (sid))),
 	r'spotify:track:(?P<sid>\S+)': (lambda sid: ("spotify:track:%s" % (sid))),
+	r'(https?:\/\/soundcloud.com/\S+/\S+)': (lambda x: parseSoundcloudUrl(x))
 }
 
 def addSong(request):
@@ -35,14 +46,14 @@ def addSong(request):
 		mpcclient.addSong(r)
 	pass
 
-def getPlaying(request):
-	return { "playing": mpcclient.isPlaying() }
+def getState(request):
+	return { "playing": mpcclient.isPlaying(), "shuffeling": mpcclient.isShuffeling(), "consuming": mpcclient.isConsuming() }
 
 def getCurrent(request):
 	return mpcclient.getCurrent()
 
 def getPlaylist(request):
-	return { 'playlist': [ { 'file':x['file'], 'title':x['title'] } for x in mpcclient.getPlaylist() ]}
+	return { 'playlist': [ { 'id':x['id'], 'pos':x['pos'], 'file':x['file'], 'title':x['title'] } for x in mpcclient.getPlaylist() ]}
 
 def searchLocal(request):
 	pass
@@ -57,7 +68,7 @@ command_list = {
 	'setVolume': setVolume,
 	'setSong': setSong,
 	'addSong': addSong,
-	'getPlaying': getPlaying,
+	'getState': getState,
 	'getCurrent': getCurrent,
 	'getPlaylist': getPlaylist,
 	'searchLocal': searchLocal,
