@@ -1,40 +1,54 @@
 from iradioapp import models
-from iradioapp.mpcclient import client, isPlaying
+from iradioapp import mpcclient
+import re
 
-def playpause():
-	if isPlaying():
-		client.pause()
-	else:
-		client.play()
+def playpause(request):
+	mpcclient.playPause()
 
-def next():
-	client.next()
+def next(request):
+	mpcclient.next()
 
-def previous():
-	client.previous()
+def previous(request):
+	mpcclient.previous()
 
-def setVolume():
+def setVolume(request):
+	mpcclient.setVolume(50)
 	pass
 
-def setSong():
+def setSong(request):
 	pass
 
-def addSong():
+song_regex = {
+	r'http:\/\/open.spotify.com\/track\/(?P<sid>\S+)': (lambda sid: ("spotify:track:%s" % (sid))),
+	r'spotify:track:(?P<sid>\S+)': (lambda sid: ("spotify:track:%s" % (sid))),
+}
+
+def addSong(request):
+	result = []
+	inp = request.POST.get('url', '')
+	for regex in song_regex:
+		urls = re.findall(regex, inp)
+		for r in urls:
+			result.append(song_regex[regex](r))
+#		print("%s: %s (%s)" % (regex,urls,inp))
+	print(result)
+	for r in result:
+		mpcclient.addSong(r)
 	pass
 
-def getPlaying():
+def getPlaying(request):
+	return mpcclient.isPlaying()
+
+def getCurrent(request):
 	pass
 
-def getCurrent():
+def getPlaylist(request):
 	pass
 
-def getPlaylist():
+def searchLocal(request):
 	pass
 
-def searchLocal():
-	pass
-
-def listLocal():
+def listLocal(request):
 	pass
 
 command_list = {

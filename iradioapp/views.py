@@ -10,10 +10,12 @@ def home(request):
 
 def command(request):
 	if request.method == 'POST':
-		print(request.POST.get('command'))
-		cmd = command_list[request.POST.get('command', None)]
+		cmd_str = request.POST.get('command', None)
+		if not cmd_str:
+			return HttpResponse("No command given", status=400)
+		cmd = command_list[cmd_str]
 		if cmd:
-			res = cmd()
+			res = cmd(request)
 			if isinstance(res, dict):
 				return JsonResponse(res)
 			else:
