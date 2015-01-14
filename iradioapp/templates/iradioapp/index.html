@@ -315,7 +315,7 @@
       });
 
         //startup script
-        sendCommand("getPlaying",{},function(data) {
+        sendCommand("getState",{},function(data) {
           isplaying = data["playing"];
           updateplaybtn();
         });
