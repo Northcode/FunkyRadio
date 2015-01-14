@@ -1,6 +1,6 @@
 from iradioapp import models
 from iradioapp import mpcclient
-import urllip.request
+import urllib.request
 import json
 import re
 
