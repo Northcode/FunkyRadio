@@ -5,6 +5,9 @@ HOST = 'localhost'
 PORT = '6600'
 PASSWORD = False
 
+_shuffle = False
+_consume = False
+
 client = None
 
 def init():
@@ -13,7 +16,6 @@ def init():
 		client = MPDClient()
 		try:
 			client.connect(host=HOST, port=PORT)
-#			client.consume(True)
 		except SocketError:
 			client = None
 			print("Failed to establish connection to mpc server at %s:%s" % (HOST, PORT))
@@ -25,6 +27,8 @@ def init():
 				client = None
 				print("Failed to authenticate connection to mpc server at %s:%s with password" % (HOST, PORT))
 				return
+		client.consume(1 if _consume else 0)
+		client.shuffle(1 if _shuffle else 0)
 
 def checkConnection(func, *params):
 	global client
@@ -50,6 +54,12 @@ def _isPlaying():
 
 def isPlaying():
 	return checkConnection(_isPlaying)
+
+def isShuffeling():
+	return _shuffle
+
+def isConsuming():
+	return _consume
 
 def _playPause():
 	global client

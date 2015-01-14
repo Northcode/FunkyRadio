@@ -35,8 +35,8 @@ def addSong(request):
 		mpcclient.addSong(r)
 	pass
 
-def getPlaying(request):
-	return { "playing": mpcclient.isPlaying() }
+def getState(request):
+	return { "playing": mpcclient.isPlaying(), "shuffeling": mpcclient.isShuffeling(), "consuming": mpcclient.isConsuming() }
 
 def getCurrent(request):
 	return mpcclient.getCurrent()
@@ -57,7 +57,7 @@ command_list = {
 	'setVolume': setVolume,
 	'setSong': setSong,
 	'addSong': addSong,
-	'getPlaying': getPlaying,
+	'getState': getState,
 	'getCurrent': getCurrent,
 	'getPlaylist': getPlaylist,
 	'searchLocal': searchLocal,
