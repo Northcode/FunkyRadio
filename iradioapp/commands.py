@@ -42,7 +42,7 @@ def getCurrent(request):
 	return mpcclient.getCurrent()
 
 def getPlaylist(request):
-	return { 'playlist': mpcclient.getPlaylist() }
+	return { 'playlist': [ { 'file':x['file'], 'title':x['title'] } for x in mpcclient.getPlaylist() ]}
 
 def searchLocal(request):
 	pass
