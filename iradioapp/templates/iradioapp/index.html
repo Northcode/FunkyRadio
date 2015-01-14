@@ -171,25 +171,35 @@
 
     $(function() {
 
+
+
       var isplaying = false;
       var isshuffling = false;
 
+      var updateplaybtn = function() {
+        if(isplaying) {
+          $("#player-play").addClass("hidden");
+          $("#player-pause").removeClass("hidden");
+        } else {
+          $("#player-pause").addClass("hidden");
+          $("#player-play").removeClass("hidden");
+        }
+      };
+
       var play = function() {
         if(isplaying) return;
-        $("#player-play").addClass("hidden");
-        $("#player-pause").removeClass("hidden");
-		sendCommand("playpause");
+        sendCommand("playpause");
         console.log("PLAY!");
         isplaying = true;
+        updateplaybtn();
       };
 
       var pause = function() {
         if(!isplaying) return;
-        $("#player-pause").addClass("hidden");
-        $("#player-play").removeClass("hidden");
-		sendCommand("playpause");
+        sendCommand("playpause");
         console.log("PAUSE!");
         isplaying = false;
+        updateplaybtn();
       };
 
       var shuffle = function() {
@@ -231,6 +241,14 @@
         if(term != "")
           console.log("search for: " + term);
       },1000))
+
+      //startup script
+      sendCommand("getPlaying",{},function(data) {
+        isplaying = data["playing"];
+        updateplaybtn();
+      });
+
+      //end startup
 
     });
 

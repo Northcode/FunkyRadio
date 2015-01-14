@@ -37,7 +37,7 @@ def addSong(request):
 	pass
 
 def getPlaying(request):
-	return mpcclient.isPlaying()
+	return { "playing": mpcclient.isPlaying() }
 
 def getCurrent(request):
 	pass
