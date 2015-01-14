@@ -68,7 +68,7 @@
         <a href="#" id="player-pause" class="hidden"><span class="glyphicon glyphicon-pause"></span></a>
         <a href="#" id="player-next"><span class="glyphicon glyphicon-step-forward"></span></a>
         <a href="#" id="player-shuffle"><span class="glyphicon glyphicon-random"></span></a>
-        <span style="margin-left: 20px; font-weight: bold; color: #999;">Song Name - Album - Artist</span>
+        <span id="songinfo" style="margin-left: 20px; font-weight: bold; color: #999;">Song Name - Album - Artist</span>
       </div>
     </div>
 
@@ -169,6 +169,19 @@
 		});
 	}
 
+	var updateSongInfo = function() {
+		sendCommand("getCurrent", {}, function(data) {
+			$("#songinfo").text(data.title + " - " + data.album + " - " + data.artist);
+			console.log(data);
+		});
+	};
+
+	var updatePlaylist = function() {
+		sendCommand("getPlaylist", {}, function(data) {
+			console.log(data);
+		});
+	};
+
     $(function() {
 
 
@@ -204,6 +217,7 @@
 
       var shuffle = function() {
         isshuffling = !isshuffling;
+		sendCommand("shuffle", { "status": isshuffling });
         if(isshuffling) {
           $("#player-shuffle").addClass("shuffling");
         } else {
@@ -247,8 +261,11 @@
         isplaying = data["playing"];
         updateplaybtn();
       });
+	updateSongInfo();
+	updatePlaylist();
 
       //end startup
+
 
     });
 

@@ -13,6 +13,7 @@ def init():
 		client = MPDClient()
 		try:
 			client.connect(host=HOST, port=PORT)
+#			client.consume(True)
 		except SocketError:
 			client = None
 			print("Failed to establish connection to mpc server at %s:%s" % (HOST, PORT))
@@ -73,5 +74,19 @@ def setVolume(vol):
 	checkConnection(client.setvol,vol)
 
 def addSong(url):
+	global client
 	checkConnection(client.add, url)
+
+def setShuffle(state):
+	global client
+	checkConnection(client.shuffle, state)
+
+def getCurrent():
+	global client
+	return checkConnection(client.currentsong)
+
+def getPlaylist():
+	global client
+	return checkConnection(client.playlistinfo)
+
 

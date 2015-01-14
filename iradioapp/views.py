@@ -16,7 +16,7 @@ def command(request):
 		cmd = command_list[cmd_str]
 		if cmd:
 			res = cmd(request)
-			if isinstance(res, dict):
+			if isinstance(res, dict) or isinstance(res, list):
 				return JsonResponse(res)
 			else:
 				return HttpResponse(content=res if isinstance(res, str) else "", status=200)

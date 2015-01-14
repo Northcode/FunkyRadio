@@ -30,7 +30,6 @@ def addSong(request):
 		urls = re.findall(regex, inp)
 		for r in urls:
 			result.append(song_regex[regex](r))
-#		print("%s: %s (%s)" % (regex,urls,inp))
 	print(result)
 	for r in result:
 		mpcclient.addSong(r)
@@ -40,10 +39,10 @@ def getPlaying(request):
 	return { "playing": mpcclient.isPlaying() }
 
 def getCurrent(request):
-	pass
+	return mpcclient.getCurrent()
 
 def getPlaylist(request):
-	pass
+	return { 'playlist': mpcclient.getPlaylist() }
 
 def searchLocal(request):
 	pass
