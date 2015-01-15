@@ -76,6 +76,7 @@
   </style>
 </head>
 <body>
+  {% csrf_token %}
   <div class="container spacetop">
     <h3>Funky Music Player</h3>
     <div class="panel panel-default player">
@@ -183,7 +184,9 @@
       }
     });
 
-    function sendCommand(cmd, args={}, callback=null) {
+    function sendCommand(cmd, args, callback) {
+	  if (!args) args = {}
+	  if (!callback) callback = null;
       args['command'] = cmd;
       $.ajax('{% url "iradioapp:command" %}',{
         method: "POST",
