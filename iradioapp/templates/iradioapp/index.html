@@ -300,9 +300,10 @@
           var url = $("#content-remote").val();
           console.log(url);
           $("#content-remote").val('');
-          sendCommand('addSong',{url: url});
-          updatePlaylist();
-          updateSongInfo();
+          sendCommand('addSong',{url: url}, function() {
+              updatePlaylist();
+              updateSongInfo();
+		  });
         },200);
 
       });
