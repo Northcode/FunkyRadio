@@ -25,8 +25,9 @@ def setSong(request):
 def parseSoundcloudUrl(url):
 	rurl = "http://api.soundcloud.com/resolve.json?client_id=%s&url=%s" % (CLIENT_ID, url)
 	resp = urllib.request.urlopen(rurl)
-	data = json.load(resp.read())
-	return "soundcloud:song/%s" % (data.id)
+	data = resp.read().decode('utf-8')
+	o = json.loads(data)
+	return "soundcloud:song/%s.%s" % (o['title'], o['id'])
 
 song_regex = {
 	r'https?:\/\/open.spotify.com\/track\/(?P<sid>\S+)': (lambda sid: ("spotify:track:%s" % (sid))),
