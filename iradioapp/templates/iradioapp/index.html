@@ -216,6 +216,7 @@
         $(data["playlist"]).each(function (i,e) {
           console.log(i,e);
           $("#player-playlist").append("<tr><td>"+i+"</td><td>" + e.title + "</td></tr>")
+          updateSongInfo();
         });
       });
     };
@@ -273,14 +274,14 @@
         console.log("NEXT!");
         sendCommand("next");
         play();
-        updateSongInfo();
+        updatePlaylist();
       });
 
       $("#player-back").click(function() {
         console.log("BACK!");
         sendCommand("previous");
         play();
-        updateSongInfo();
+        updatePlaylist();
       });
 
       $("#player-shuffle").click(function() {
@@ -302,7 +303,6 @@
           $("#content-remote").val('');
           sendCommand('addSong',{url: url}, function() {
               updatePlaylist();
-              updateSongInfo();
 		  });
         },200);
 
@@ -324,7 +324,6 @@
           updateplaybtn();
         });
         updatePlaylist();
-        updateSongInfo();
         //end startup
       });
     </script>
