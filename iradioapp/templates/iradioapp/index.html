@@ -74,6 +74,12 @@
   #content-local-songs {
     display: none;
   }
+
+  #player-playlist-count {
+    position: relative;
+    top: -3px;
+  }
+
   </style>
 </head>
 <body>
@@ -92,7 +98,7 @@
 
   <div class="container spacemid">
     <div class="col-md-4">
-      <h3>Now Playing: <span class="badge">7</span></h3>
+      <h3>Now Playing: <span class="badge" id="player-playlist-count">#</span></h3>
       <table class="table" id="player-playlist">
         <th>#</th><th>Song name<th>
         </table>
@@ -219,6 +225,7 @@
           console.log(i,e);
           $("#player-playlist").append("<tr><td>"+i+"</td><td>" + e.title + "</td></tr>")
         });
+        $("#player-playlist-count").html(data["playlist"].length);
         updateSongInfo();
       });
     };
