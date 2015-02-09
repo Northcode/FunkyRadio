@@ -70,7 +70,7 @@ def toggle_playing():
 		send("play")
 
 def set_shuffle(val):
-	send("random",('on' if val else 'off'))
+	send(["random",('on' if val else 'off')])
 	pass
 
 def next():

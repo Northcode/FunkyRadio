@@ -254,6 +254,11 @@
           $("#player-pause").addClass("hidden");
           $("#player-play").removeClass("hidden");
         }
+        if(isshuffling) {
+          $("#player-shuffle").addClass("shuffling");
+        } else {
+          $("#player-shuffle").removeClass("shuffling");
+        }
       };
 
       var play = function() {
@@ -343,6 +348,7 @@
         updatePlaylist();
         sendCommand("getState",{},function(data) {
           isplaying = data["playing_status"]["playing"];
+          isshuffling = data["flags"]["random"];
           updateplaybtn();
         });
       });
