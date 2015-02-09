@@ -26,7 +26,7 @@ def get_status():
 		current_song = trackinfo[0].split('{(.}')
 		current_song = { "title": current_song[0], "album": current_song[1], "artist": current_song[2] }
 		playing_status_proto = [x for x in trackinfo[1].split(' ') if not x == '']
-		playing_status = { "playing": (playing_status_proto[0] == "[playing]"), "tracknr": playing_status_proto[1][2:].split('/'), "time": playing_status_proto[2], "percent": playing_status_proto[3] }
+		playing_status = { "playing": (playing_status_proto[0] == "[playing]"), "tracknr": playing_status_proto[1][1:].split('/'), "time": playing_status_proto[2], "percent": playing_status_proto[3] }
 		flags_proto = trackinfo[2]
 	else:
 		current_song = None
