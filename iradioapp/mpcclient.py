@@ -30,7 +30,7 @@ def get_status():
 		flags_proto = trackinfo[2]
 	else:
 		current_song = None
-		playing_status = None
+		playing_status = { "playing": False, "tracknr": 0, "time": "0:00/0:00", "percent": "0" }
 		flags_proto = trackinfo[0]
 	flags_proto = [x for x in flags_proto.replace(':',' ').split(' ') if not x == '']
 	flags_proto = [(True if x == 'on' else False if x == 'off' else x) for x in flags_proto]
