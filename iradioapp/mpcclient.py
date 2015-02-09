@@ -63,7 +63,8 @@ def set_song(songindex):
 	pass
 
 def toggle_playing():
-	if get_status()["playing_status"]["playing"]:
+	status = get_status()["playing_status"]
+	if status["playing"] == True:
 		send("pause")
 	else:
 		send("play")
