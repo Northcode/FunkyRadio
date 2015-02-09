@@ -24,14 +24,14 @@ def get_status():
 	flags_proto = ""
 	if len(trackinfo) > 2:
 		current_song = trackinfo[0].split('{(.}')
-		current_song = { "name": current_song[0], "album": current_song[1], "artist": current_song[2] }
+		current_song = { "title": current_song[0], "album": current_song[1], "artist": current_song[2] }
 		playing_status_proto = [x for x in trackinfo[1].split(' ') if not x == '']
-		playing_status = { "is_playing": (playing_status_proto[0] == "[playing]"), "tracknr": playing_status_proto[1], "time": playing_status_proto[2], "percent": playing_status_proto[3] }
+		playing_status = { "playing": (playing_status_proto[0] == "[playing]"), "tracknr": playing_status_proto[1], "time": playing_status_proto[2], "percent": playing_status_proto[3] }
 		flags_proto = trackinfo[2]
 	else:
 		current_song = None
 		playing_status = None
-		flags_proto = trackinfo[2]
+		flags_proto = trackinfo[0]
 	flags_proto = [x for x in flags_proto.replace(':',' ').split(' ') if not x == '']
 	flags_proto = [(True if x == 'on' else False if x == 'off' else x) for x in flags_proto]
 	flags = dict(zip(flags_proto[0::2],flags_proto[1::2]))
@@ -48,8 +48,10 @@ def get_playlist():
 	playlist = send(['playlist','-f','%title%{(.}%album%{(.}%artist%']).split('\n')
 	xplaylist = []
 	for song in playlist:
+		if song == '':
+			continue
 		songinfo = song.split('{(.}')
-		xplaylist.append({ "name": song[0], "album": song[1], "artist": song[2] })
+		xplaylist.append({ "title": songinfo[0], "album": songinfo[1], "artist": songinfo[2] })
 	return xplaylist
 
 def add_song(url):
@@ -61,7 +63,7 @@ def set_song(songindex):
 	pass
 
 def toggle_playing():
-	if get_status()["playing_status"]["is_playing"]:
+	if get_status()["playing_status"]["playing"]:
 		send("pause")
 	else:
 		send("play")

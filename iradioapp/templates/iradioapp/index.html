@@ -357,7 +357,7 @@
 
         //startup script
         sendCommand("getState",{},function(data) {
-          isplaying = data["playing"];
+          isplaying = data["playing_status"]["playing"];
           updateplaybtn();
         });
         updatePlaylist();
