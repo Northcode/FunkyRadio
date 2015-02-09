@@ -52,7 +52,7 @@ def getState(request):
 	return mpcclient.get_status()
 
 def getCurrent(request):
-	return mpcclient.get_track()
+	return mpcclient.get_status()
 
 def getPlaylist(request):
 	return { "playlist": mpcclient.get_playlist() }
@@ -62,6 +62,9 @@ def searchLocal(request):
 
 def listLocal(request):
 	pass
+
+def setShuffle(request):
+	mpcclient.set_shuffle(request.POST.get('value',False))
 
 command_list = {
 	'playpause': playpause,
@@ -74,5 +77,6 @@ command_list = {
 	'getCurrent': getCurrent,
 	'getPlaylist': getPlaylist,
 	'searchLocal': searchLocal,
-	'listLocal': listLocal
+	'listLocal': listLocal,
+	'setShuffle': setShuffle
 }
