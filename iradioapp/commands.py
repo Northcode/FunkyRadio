@@ -56,7 +56,7 @@ def getCurrent(request):
 def getPlaylist(request):
 	list = mpcclient.getPlaylist()
 	if list is None:
-		return 'error': 'could not fetch playlist'
+		return { 'error': 'could not fetch playlist' }
 	else
 		return { 'playlist': [ { 'id':x['id'], 'pos':x['pos'], 'file':x['file'], 'title':x['title'] } for x in mpcclient.getPlaylist() ]}
 
