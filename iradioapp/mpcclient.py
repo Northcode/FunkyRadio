@@ -1,102 +1,73 @@
-from mpd import MPDClient, CommandError, ConnectionError
-from socket import error as SocketError
+from subprocess import *
 
-HOST = 'localhost'
-PORT = '6600'
-PASSWORD = False
+def send(args):
+	if type(args) is str:
+		args = [args]
+	proc = Popen(["mpc"] + args,stdout=PIPE,stderr=PIPE)
+	out,ret = proc.communicate()
+	decoded = out.decode('utf-8')
+	err = ret.decode("utf-8")
+	if not err == "":
+		# todo: error handling
+		raise Exception("Error executing command: " + err)
+		pass
+	return decoded
 
-_shuffle = False
-_consume = False
+def get_volume():
+	vol = send("volume")
+	return vol.split(':')[1].strip()
 
-client = None
-
-def init():
-	global client
-	if not client:
-		client = MPDClient()
-		try:
-			client.connect(host=HOST, port=PORT)
-		except SocketError:
-			client = None
-			print("Failed to establish connection to mpc server at %s:%s" % (HOST, PORT))
-			return
-		if PASSWORD:
-			try:
-				client.password(PASSWORD)
-			except CommandError:
-				client = None
-				print("Failed to authenticate connection to mpc server at %s:%s with password" % (HOST, PORT))
-				return
-		client.consume(1 if _consume else 0)
-		client.shuffle(1 if _shuffle else 0)
-
-def checkConnection(func, *params):
-	global client
-	if not client:
-		init()
-	try:
-		return func(*params)
-	except ConnectionError:
-		client = None
-		init()
-		try:
-			return func(*params)
-		except ConnectionError:
-			return
-
-
-def _isPlaying():
-	global client
-	r = client.status()
-	if not r:
-		return False
-	return r["state"] == "play"
-
-def isPlaying():
-	return checkConnection(_isPlaying)
-
-def isShuffeling():
-	return _shuffle
-
-def isConsuming():
-	return _consume
-
-def _playPause():
-	global client
-	if isPlaying():
-		client.pause()
+def get_status():
+	trackinfo = send(['status','-f','%title%{(.}%album%{(.}%artist%']).split('\n')
+	current_song = ""
+	playing_status = ""
+	flags_proto = ""
+	if len(trackinfo) > 2:
+		current_song = trackinfo[0].split('{(.}')
+		current_song = { "name": current_song[0], "album": current_song[1], "artist": current_song[2] }
+		playing_status_proto = [x for x in trackinfo[1].split(' ') if not x == '']
+		playing_status = { "is_playing": (playing_status_proto[0] == "[playing]"), "tracknr": playing_status_proto[1], "time": playing_status_proto[2], "percent": playing_status_proto[3] }
+		flags_proto = trackinfo[2]
 	else:
-		client.play()
+		current_song = None
+		playing_status = None
+		flags_proto = trackinfo[2]
+	flags_proto = [x for x in flags_proto.replace(':',' ').split(' ') if not x == '']
+	flags_proto = [(True if x == 'on' else False if x == 'off' else x) for x in flags_proto]
+	flags = dict(zip(flags_proto[0::2],flags_proto[1::2]))
+	return { "current_song": current_song, "playing_status": playing_status, "flags": flags }
 
-def playPause():
-	checkConnection(_playPause)
+def set_volume(vol):
+	send(["volume",vol]) # maybe this is not safe.... should do some typechecks, oh well
+	pass
+
+def get_track():
+	return get_status()["current_song"]
+
+def get_playlist():
+	playlist = send(['playlist','-f','%title%{(.}%album%{(.}%artist%']).split('\n')
+	xplaylist = []
+	for song in playlist:
+		songinfo = song.split('{(.}')
+		xplaylist.append({ "name": song[0], "album": song[1], "artist": song[2] })
+	return xplaylist
+
+def add_song(url):
+	send(["add",url])
+	pass
+
+def set_song(songindex):
+	send(["play",songindex])
+	pass
+
+def toggle_playing():
+	if get_status()["playing_status"]["is_playing"]:
+		send("pause")
+	else:
+		send("play")
 
 def next():
-	global client
-	checkConnection(client.next)
+	send("next")
 
-def previous():
-	global client
-	checkConnection(client.previous)
-
-def setVolume(vol):
-	global client
-	checkConnection(client.setvol,vol)
-
-def addSong(url):
-	global client
-	checkConnection(client.add, url)
-
-def setShuffle(state):
-	global client
-	checkConnection(client.shuffle, state)
-
-def getCurrent():
-	global client
-	return checkConnection(client.currentsong)
-
-def getPlaylist():
-	global client
-	return checkConnection(client.playlistinfo)
-
-
+def prev():
+	send("prev")

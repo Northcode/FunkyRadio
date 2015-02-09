@@ -7,19 +7,20 @@ import re
 CLIENT_ID = "3ace999b30d1885aba027ba93de287ff"
 
 def playpause(request):
-	mpcclient.playPause()
+	mpcclient.toggle_playing()
 
 def next(request):
 	mpcclient.next()
 
 def previous(request):
-	mpcclient.previous()
+	mpcclient.prev()
 
 def setVolume(request):
-	mpcclient.setVolume(request.POST.get('volume','30'))
+	mpcclient.set_volume(request.POST.get('volume','30'))
 	pass
 
 def setSong(request):
+	mpcclient.set_song(request.POST.get('songid','1'))
 	pass
 
 def parseSoundcloudUrl(url):
@@ -44,21 +45,17 @@ def addSong(request):
 			result.append(song_regex[regex](r))
 	print(result)
 	for r in result:
-		mpcclient.addSong(r)
+		mpcclient.add_song(r)
 	return { 'songs_added': [ x for x in result ] }
 
 def getState(request):
-	return { "playing": mpcclient.isPlaying(), "shuffeling": mpcclient.isShuffeling(), "consuming": mpcclient.isConsuming() }
+	return mpcclient.get_status()
 
 def getCurrent(request):
-	return mpcclient.getCurrent()
+	return mpcclient.get_track()
 
-def getPlaylist(request):
-	list = mpcclient.getPlaylist()
-	if list is None:
-		return { 'error': 'could not fetch playlist' }
-	else:
-		return { 'playlist': [ { 'id':x['id'], 'pos':x['pos'], 'file':x['file'], 'title':x['title'] } for x in mpcclient.getPlaylist() ]}
+def get_playlist(request):
+	return mpcclient.get_playlist()
 
 def searchLocal(request):
 	pass
