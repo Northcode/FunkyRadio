@@ -226,6 +226,7 @@
         $("#songinfo").text(songdata.title + " - " + songdata.album + " - " + songdata.artist);
         $("#player-playlist").children().children().removeClass("active");
         $($("#player-playlist").children().children()[data["playing_status"]["tracknr"][0]]).addClass("active");
+        $("#player-volume").val(data["flags"]["volume"].substring(0,data["flags"]["volume"].length - 1));
       });
     };
 
@@ -359,6 +360,10 @@
 
         });
       });
+
+      $("#player-volume").keyup(function(e){
+        if(e.keyCode == 13) $("#player-volume-btn").click();
+      }); 
 
         //startup script
         sendCommand("getState",{},function(data) {
