@@ -95,6 +95,11 @@
       <span id="songinfo" style="margin-left: 20px; font-weight: bold; color: #999;">Song Name - Album - Artist</span>
       <a href="#" id="player-refresh"><span class="glyphicon glyphicon-refresh"></span></a>
       <span id="player-status" style="margin-left: 20px; font-weight: bold; color: #999;">status</span>
+      <div class="input-group" style="display: inline-block;">
+        <span class="input-group-addon">Volume</span>
+        <input type="text" maxlength="3" id="player-volume" class="form-control" placeholder="50" />
+        <button class="input-group-addon btn btn-default" id="player-volume-btn">Set</button>
+      </div>
     </div>
   </div>
 
@@ -334,6 +339,13 @@
 
       $("#player-refresh").click(function(){
         updatePlaylist();
+      });
+
+      $("#player-volume-btn").click(function() {
+        var vol = $("#player-volume").val();
+        sendCommand("setVolume",{ volume: vol },function() {
+
+        });
       });
 
         //startup script
