@@ -4,5 +4,4 @@ class IRadioAppConfig(AppConfig):
 	name = "iradioapp"
 	verbose_name = "FunkyRadio"
 	def ready(self):
-		mpcclient.init()
 		pass

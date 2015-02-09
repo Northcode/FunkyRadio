@@ -54,7 +54,7 @@ def getState(request):
 def getCurrent(request):
 	return mpcclient.get_track()
 
-def get_playlist(request):
+def getPlaylist(request):
 	return mpcclient.get_playlist()
 
 def searchLocal(request):
