@@ -64,7 +64,7 @@ def listLocal(request):
 	pass
 
 def setShuffle(request):
-	mpcclient.set_shuffle(request.POST.get('value',False))
+	mpcclient.set_shuffle(True if request.POST.get('value','false') == "true" else False)
 
 command_list = {
 	'playpause': playpause,

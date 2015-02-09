@@ -274,7 +274,7 @@
 
       var shuffle = function() {
         isshuffling = !isshuffling;
-        sendCommand("shuffle", { "status": isshuffling });
+        sendCommand("setShuffle", { "status": isshuffling });
         if(isshuffling) {
           $("#player-shuffle").addClass("shuffling");
         } else {
