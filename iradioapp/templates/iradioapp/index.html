@@ -221,11 +221,11 @@
 
     var updateSongInfo = function() {
       sendCommand("getCurrent", {}, function(data) {
+        console.log(data);
         var songdata = data["current_song"];
         $("#songinfo").text(songdata.title + " - " + songdata.album + " - " + songdata.artist);
         $("#player-playlist").children().children().removeClass("active");
         $("#player-playlist").children().children()[data["playing_status"]["tracknr"][0]].addClass("active");
-        console.log(data);
       });
     };
 
