@@ -54,7 +54,11 @@ def getCurrent(request):
 	return mpcclient.getCurrent()
 
 def getPlaylist(request):
-	return { 'playlist': [ { 'id':x['id'], 'pos':x['pos'], 'file':x['file'], 'title':x['title'] } for x in mpcclient.getPlaylist() ]}
+	list = mpcclient.getPlaylist()
+	if list is None:
+		return 'error': 'could not fetch playlist'
+	else
+		return { 'playlist': [ { 'id':x['id'], 'pos':x['pos'], 'file':x['file'], 'title':x['title'] } for x in mpcclient.getPlaylist() ]}
 
 def searchLocal(request):
 	pass
