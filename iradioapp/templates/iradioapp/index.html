@@ -326,8 +326,9 @@
           var url = $("#content-remote").val();
           console.log(url);
           $("#content-remote").val('');
-          sendCommand('addSong',{url: url}, function() {
+          sendCommand('addSong',{url: url}, function(data) {
               updatePlaylist();
+              console.log(data);
 		  });
         },200);
 

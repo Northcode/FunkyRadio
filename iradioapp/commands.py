@@ -45,7 +45,7 @@ def addSong(request):
 	print(result)
 	for r in result:
 		mpcclient.addSong(r)
-	pass
+	return { 'songs_added': [ x for x in result ] }
 
 def getState(request):
 	return { "playing": mpcclient.isPlaying(), "shuffeling": mpcclient.isShuffeling(), "consuming": mpcclient.isConsuming() }
