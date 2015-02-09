@@ -93,6 +93,8 @@
       <a href="#" id="player-next"><span class="glyphicon glyphicon-step-forward"></span></a>
       <a href="#" id="player-shuffle"><span class="glyphicon glyphicon-random"></span></a>
       <span id="songinfo" style="margin-left: 20px; font-weight: bold; color: #999;">Song Name - Album - Artist</span>
+      <a href="#" id="player-refresh"><span class="glyphicon glyphicon-refresh"></span></a>
+      <span id="player-status" style="margin-left: 20px; font-weight: bold; color: #999;">status</span>
     </div>
   </div>
 
@@ -199,7 +201,10 @@
       $.ajax('{% url "iradioapp:command" %}',{
         method: "POST",
         data: args,
-        success: callback
+        success: callback,
+        error: function(data) {
+          $("#player-status").html("Error getting player data: " + data);
+        }
       });
     }
 
@@ -325,6 +330,10 @@
       $("#content-local-albums>li").click(function() {
         $("#content-local-albums").slideUp();
         $("#content-local-songs").slideDown();
+      });
+
+      $("#player-refresh").click(function(){
+        updatePlaylist();
       });
 
         //startup script

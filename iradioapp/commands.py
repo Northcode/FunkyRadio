@@ -16,7 +16,7 @@ def previous(request):
 	mpcclient.previous()
 
 def setVolume(request):
-	mpcclient.setVolume(50)
+	mpcclient.setVolume(request.POST.get('volume','30'))
 	pass
 
 def setSong(request):
