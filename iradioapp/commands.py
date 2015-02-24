@@ -34,7 +34,7 @@ song_regex = {
 	r'https?:\/\/open.spotify.com\/track\/(?P<sid>\S+)': (lambda sid: ("spotify:track:%s" % (sid))),
 	r'spotify:track:(?P<sid>\S+)': (lambda sid: ("spotify:track:%s" % (sid))),
 	r'(https?:\/\/soundcloud.com/\S+/\S+)': (lambda x: parseSoundcloudUrl(x)),
-        r'(https?:\/\/youtube.com/.*)' : (lambda x: ("yt:%s" % x))
+        r'https?://(?:www\.)?youtu(?:be\.com/watch\?v=|\.be/)(\w*)(&(amp;)?[\w\?=]*)?' : (lambda x: ("yt:%s" % x))
 }
 
 def addSong(request):
