@@ -205,14 +205,18 @@
       }
     });
 
+    bool sending = false;
+
     function sendCommand(cmd, args, callback) {
+     if(sending) return;
+     sending = true;
 	  if (!args) args = {}
 	  if (!callback) callback = null;
       args['command'] = cmd;
       $.ajax('{% url "iradioapp:command" %}',{
         method: "POST",
         data: args,
-        success: callback,
+        success: function(data) { sending = false; callback(data); },
         error: function(data) {
           $("#player-status").html("Error getting player data: " + data);
         }
@@ -235,10 +239,18 @@
         $("#player-playlist").html("<tbody><th>#</th><th>Song name<th>");
         $(data["playlist"]).each(function (i,e) {
           console.log(i,e);
-          $("#player-playlist").append("<tr><td>"+i+"</td><td>" + e.title + "</td></tr>")
+          $("#player-playlist").append("<tr><td>"+i+"</td><td data-id='"+i+"' class='playlist-item'>" + e.title + "</td></tr>")
         });
         $("#player-playlist-count").html(data["playlist"].length);
+	$(".playlist-item").click(changeSong);
         updateSongInfo();
+      });
+    };
+
+    var changeSong = function() {
+      var id = $(this).data('id');
+      sendCommand('setSong',{songid: id},function() {
+        updatePlaylist();
       });
     };
 
